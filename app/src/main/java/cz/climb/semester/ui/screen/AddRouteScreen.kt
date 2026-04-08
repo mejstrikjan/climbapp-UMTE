@@ -287,7 +287,7 @@ fun AddRouteScreen(
                 Text(photoMessage, style = MaterialTheme.typography.bodySmall)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(onClick = { launchInlinePhotoCapture() }) {
-                        Text(if (photoUri == null) "Vyfotit ve formuláři" else "Přefotit ve formuláři")
+                        Text("Vyfotit")
                     }
                     if (photoUri != null) {
                         Button(onClick = {

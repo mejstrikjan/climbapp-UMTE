@@ -1,31 +1,40 @@
 # Semester Climb
 
-Zjednodusena nativni Android aplikace v Kotlinu, vytvorena jako samostatna kopie puvodniho climbing logu pro semestralni projekt.
+Nativní Android aplikace v Kotlinu vytvořená jako semestrální projekt. Projekt vychází z původní lezecké aplikace, ale je přepsaný do čistého Kotlin / Jetpack Compose řešení.
 
 ## Co projekt obsahuje
 
 - 6 obrazovek:
-  - `Dashboard`
-  - `Oblasti`
   - `Cesty`
-  - `Session`
+  - `Deník`
+  - `Mapa`
+  - `Oblasti`
   - `Profil`
-  - `Kamera`
-- `Room` persistenci pro oblasti, cesty, session, vystupy a fotky z kamery
-- `DataStore` pro uzivatelske preference
+  - formuláře pro přidání a úpravy dat
+- `Room` persistenci pro oblasti, skály, sektory, cesty, výstupy, session a fotky
+- `DataStore` pro uživatelské preference
 - `Hilt` dependency injection
-- `Mapy.com REST API` map tiles primo na dashboardu
-- `CameraX` preview + foceni
-- blokujici I/O mimo UI thread pres repository vrstvu a coroutines
+- `Mapy.com REST API` pro mapové dlaždice a práci s polohou oblasti
+- foto workflow přímo ve formuláři cesty
+- blokující I/O mimo UI thread přes repository vrstvu a coroutines
 
-## Mapovani na zadani
+## Hlavní funkcionalita
 
-- `alespon 5 obrazovek`: splneno, aplikace ma 6 obrazovek
-- `blocking I/O mimo UI thread`: splneno, Room / DataStore / camera file I/O bezi mimo UI thread pres repository vrstvu a `Dispatchers.IO`
-- `datova persistence`: splneno, pouzity `Room` a `DataStore`
-- `vhodne usporadani souboru`: splneno, projekt je rozdeleny na `data`, `di`, `navigation`, `ui`, `viewmodel`
-- `dependency injection`: splneno, pouzity `Hilt`
-- `neco navic`: splneno, integrovana `kamera` a `Mapy.com REST API`
+- správa oblastí včetně typu `sport / boulder / trad / indoor`
+- hierarchie `oblast -> skála -> sektor`
+- záznam výstupů a session
+- výběr polohy oblasti kliknutím do mapy
+- ukládání fotky cesty přímo při vytváření nebo editaci cesty
+- lokální databáze bez nutnosti backendu
+
+## Mapování na zadání
+
+- `alespoň 5 obrazovek`: splněno
+- `blocking I/O mimo UI thread`: splněno přes repository vrstvu a coroutines
+- `datová persistence`: splněno pomocí `Room` a `DataStore`
+- `vhodné uspořádání souborů`: splněno, projekt je rozdělený na `data`, `di`, `navigation`, `ui`, `viewmodel`
+- `dependency injection`: splněno pomocí `Hilt`
+- `něco navíc`: splněno, aplikace obsahuje mapu a foto workflow
 
 ## Struktura
 
@@ -38,14 +47,14 @@ Zjednodusena nativni Android aplikace v Kotlinu, vytvorena jako samostatna kopie
 ## Build
 
 ```powershell
-cd C:\climbApp\semester-kotlin-app
+cd C:\semester-kotlin-app
 .\gradlew assembleDebug
 ```
 
-Vystupni APK po uspesnem buildu:
+Výstupní APK po úspěšném buildu:
 
-`C:\climbApp\semester-kotlin-app\app\build\outputs\apk\debug\app-debug.apk`
+`C:\semester-kotlin-app\app\build\outputs\apk\debug\app-debug.apk`
 
-## Poznamka
+## Poznámky k mapě
 
-Projekt je zamerne jednodussi nez puvodni React Native aplikace. Cilem je splnit zadani semestralni prace cistym nativnim Kotlin Android projektem, ne prenest celou puvodni funkcionalitu 1:1. Mapovy nahled pouziva `Mapy.com REST API` a build si cte klic ze souboru `C:\climbApp\.env.local`.
+Build si čte Mapy.com klíč ze souboru `C:\climbApp\.env.local`.

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import cz.climb.semester.ui.components.MapMarker
 import cz.climb.semester.ui.components.MapyRestMapCard
 import cz.climb.semester.ui.components.SectionCard
 import cz.climb.semester.viewmodel.AddAreaViewModel
@@ -42,6 +43,18 @@ fun AddAreaScreen(
     var favorite by rememberSaveable { mutableStateOf(false) }
     var latitude by rememberSaveable { mutableStateOf("") }
     var longitude by rememberSaveable { mutableStateOf("") }
+    val selectedMarkers = if (latitude.toDoubleOrNull() != null && longitude.toDoubleOrNull() != null) {
+        listOf(
+            MapMarker(
+                latitude = latitude.toDoubleOrNull() ?: 50.0755,
+                longitude = longitude.toDoubleOrNull() ?: 14.4378,
+                label = if (name.isBlank()) "Vybraný bod" else name,
+                isSelected = true,
+            ),
+        )
+    } else {
+        emptyList()
+    }
 
     LaunchedEffect(uiState.area?.id) {
         uiState.area?.let { area ->
@@ -130,10 +143,11 @@ fun AddAreaScreen(
                 latitude = latitude.toDoubleOrNull() ?: 50.0755,
                 longitude = longitude.toDoubleOrNull() ?: 14.4378,
                 hint = if (latitude.toDoubleOrNull() == null || longitude.toDoubleOrNull() == null) {
-                    "Klepni do mapy a souřadnice se doplní automaticky. Ruční zadání pořád zůstává možné."
+                    "Mapu můžeš posouvat prstem, přibližovat dvěma prsty a klepnutím vybrat polohu oblasti."
                 } else {
-                    "Klepnutím do mapy můžeš polohu upravit bez ručního přepisování souřadnic."
+                    "Mapu můžeš posouvat prstem, přibližovat dvěma prsty a klepnutím změnit polohu. Vybraný bod je označený."
                 },
+                markers = selectedMarkers,
                 onMapClick = { nextLatitude, nextLongitude ->
                     latitude = "%.6f".format(nextLatitude)
                     longitude = "%.6f".format(nextLongitude)
